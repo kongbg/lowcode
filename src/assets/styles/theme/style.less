@@ -1,0 +1,20 @@
+// 默认的主题颜色(白低黑字)
+@baseColor: var(--baseColor, #409EFF);
+@pageBgColor: var(--pageBgColor, rgba(255, 255, 255));
+@scrollBgColor: var(--scrollBgColor, rgba(0, 0, 0));
+@resultBgColor: var(--resultBgColor, rgba(255, 192, 203));
+@resultBorderColor: var(--resultBorderColor, rgba(255, 255, 0));
+@resultTextColor: var(--resultTextColor, rgba(0, 0, 0, 0.9));
+@border: var(--border, '1px solid red');
+
+// 导出变量 （如果在 src/assets/style/theme/model文件中配置了，就直接导出里面的字体使用）
+:export {
+  name: "less";
+  baseColor: @baseColor;
+  pageBgColor: @pageBgColor;
+  scrollBgColor: @scrollBgColor;
+  resultBgColor: @resultBgColor;
+  resultBorderColor: @resultBorderColor;
+  resultTextColor: @resultTextColor;
+  border: @border;
+}
