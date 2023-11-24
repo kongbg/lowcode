@@ -47,6 +47,7 @@
 </template>
 <script>
 import { columns, pagination, mockTableData, filterConfig, filterData, filterRules, Enum } from './dict';
+import { getData } from '@/api/admin/organizeManage/index.js'
 export default {
     name: 'OrganizeManageOrganize',
     components: {},
@@ -58,7 +59,8 @@ export default {
             filterConfig,
             filterRules,
             filterData,
-            expands: ['1']
+            expands: ['1'],
+            getData,
         }
     },
     filters: {
@@ -72,16 +74,6 @@ export default {
     created() {},
     mounted() {},
     methods: {
-        // 获取列表数据
-        getData () {
-            return new Promise(resolve => {
-                setTimeout(()=>{
-                    resolve(
-                        [null, {data: {total: 4, list: mockTableData}}]
-                    )
-                }, 100)
-            })
-        },
         // 处理列表返回数据
         handleResult (result) {
             return result;

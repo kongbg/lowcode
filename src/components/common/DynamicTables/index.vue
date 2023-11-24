@@ -69,13 +69,12 @@ export default {
                 pageSize: this.pagination.pageSize,
             };
             params = Object.assign(params, query)
-            console.log(params);
             this.tableData = [];
             this.tableLoading = true;
             let [err, res] = await api(params);
             this.tableLoading = false;
             if (!err) {
-                let { total, list } = res.data;
+                let { total, list } = res;
                 if (handleResult && typeof handleResult == "function") {
                     list = handleResult(deepClone(list));
                 }

@@ -77,6 +77,10 @@ const routes = [
     ],
   },
   {
+    path: "/admin/login",
+    component: () => import("@/views/admin/login/index.vue")
+  },
+  {
     path: "/design",
     component: Layout,
     redirect: "/design/Dashboard",
