@@ -1,7 +1,19 @@
 <template>
     <div class="user-info-action__wrapper">
         <div class="user-face">
-            <img class="icon" src="https://vueschool.io/images/banners/assets/CERTIFICATES/mark.svg" alt="">
+            <el-popover
+                placement="top-start"
+                width="150"
+                trigger="hover"
+            >
+                <div class="content">
+                    <div style="cursor: pointer;" @click="logout">退出登录</div>
+                </div>
+                <div slot="reference">
+                    <img class="icon" src="https://vueschool.io/images/banners/assets/CERTIFICATES/mark.svg" alt="">
+                </div>
+            </el-popover>
+            
             <p class="nike-name">
                 一只大提莫
             </p>
@@ -9,6 +21,7 @@
     </div>
 </template>
 <script>
+
 
 export default {
     name: "ChangeTheme",
@@ -21,7 +34,13 @@ export default {
        
     },
     methods: {
-       
+        logout() {
+            let service = this.$route.path.split('/')[1];
+            localStorage.clear();
+            this.$router.push({
+                path: `/${service}/login`
+            })
+        }
     }
 }
 </script>

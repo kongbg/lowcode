@@ -21,7 +21,7 @@ module.exports = defineConfig({
     host: '', // 开发运行时域名
     proxy: {
       ['/api']: {
-        target: 'http://192.168.3.209:6080',
+        target: 'http://localhost:6080',
         changeOrigin: true,
         // pathRewrite: {
         //   ['/api']: '',

@@ -78,6 +78,7 @@ const routes = [
   },
   {
     path: "/admin/login",
+    name: 'Adminlogin',
     component: () => import("@/views/admin/login/index.vue")
   },
   {
@@ -109,5 +110,25 @@ const router = new VueRouter({
   mode: "history",
   routes,
 });
+
+router.beforeEach((to, form, next) => {
+  let token = localStorage.getItem('Platform-token')||'';
+  let service = to.path.split('/')[1];
+  let loginPath = `/${service}/login`;
+  let dashboardPath = `/${service}/Dashboard`;
+  if (!token) {
+    if (to.path == loginPath) {
+      next();
+    } else {
+      next(loginPath);
+    }
+  } else {
+    if (to.path == loginPath) {
+      next(dashboardPath);
+    } else {
+      next();
+    }
+  }
+})
 
 export default router;

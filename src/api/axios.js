@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Message } from 'element-ui';
 import { deepClone } from '../utils/index.js';
 
 const Service = axios.create({
@@ -16,7 +17,7 @@ Service.interceptors.request.use(
         } else {
             // TODO: goto login
         }
-        console.log('config:', config)
+        // console.log('config:', config)
         return config;
     },
     error => {
@@ -35,17 +36,26 @@ Service.interceptors.response.use(
             } else if (code == '401') { // 鉴权失败，退出登录
                 return [true, null];
             } else {
-                console.log('其他错误:', response);
-                return [true, null];
+                Message({
+                    type: 'warning',
+                    message,
+                    center: false
+                })
+                let err = {message}
+                return [err, null];
             }
         } else {
             console.log('网络请求失败！:', response)
-            return [true, null];
+            let err = {message}
+            return [err, null];
         }
     },
     error => {
         console.log('响应拦截:', error)
         console.log('TODO:加弹窗提示', error.message)
+        /**
+         * code = ERR_NETWORK 网络错误
+         */
         return [error, null];
     }
 )
