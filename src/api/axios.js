@@ -32,9 +32,9 @@ Service.interceptors.response.use(
         if (status == 200) {
             let { code, data, msg: message } = response.data;
             if (code == 200) {
-                return [null, data];
+                return [null, {...data, message}];
             } else if (code == '401') { // 鉴权失败，退出登录
-                return [true, null];
+                return [true, {...data, message}];
             } else {
                 Message({
                     type: 'warning',
@@ -42,7 +42,7 @@ Service.interceptors.response.use(
                     center: false
                 })
                 let err = {message}
-                return [err, null];
+                return [err, {...data, message}];
             }
         } else {
             console.log('网络请求失败！:', response)

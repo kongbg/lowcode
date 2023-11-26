@@ -1,0 +1,52 @@
+.flow-cell{
+    margin-right: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    &.start {
+        width: 35px;
+        height: 35px;
+        background: #72df8f;
+        border-radius: 50%;
+        line-height: 35px;
+        text-align: center;
+        font-size: 12px;
+    }
+    &.end {
+        .start;
+        background: #f31c1c;
+    }
+    &.normal {
+        width: 85px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border-radius: 6px;
+        border: 1px solid #EBEEF5;
+    }
+    &.judge {
+        border: 1px solid #EBEEF5;
+        height: 45px;
+        width: 45px;
+        transform: rotateZ(45deg)skew(-18deg, -17deg);
+        margin-left: 15px;
+        // position: relative;
+        span {
+            // position: absolute;
+            // transform: rotate(-45deg)skew(0deg,0deg);
+            // display: inline-block;
+            // position: absolute;
+            // left: 27px;
+            // top: 31px;
+            // width: 60px;
+            // display: inline-block;
+            // overflow: hidden;
+            // text-overflow: ellipsis;
+            // white-space: nowrap;
+            color: #fff;
+        }
+
+    }
+    &.sub {
+        .normal;
+    }
+}

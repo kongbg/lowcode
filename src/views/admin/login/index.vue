@@ -14,7 +14,6 @@
                         <el-button type="primary" class="login-btn" size="small" :loading="loading" @click="login">登 录</el-button>
                     </el-form-item>
                 </el-form>
-
             </div>
         </div>
     </div>
@@ -54,7 +53,7 @@ export default {
                 let { token, userInfo } = res;
                 let fullpath = this.$route.query.fullpath;
                 localStorage.setItem('Platform-token', token);
-                localStorage.setItem('Platform-userInfo', userInfo);
+                localStorage.setItem('Platform-userInfo', JSON.stringify(userInfo));
                 if (fullpath) {
                     this.$router.push({ path: fullpath })
                 } else {

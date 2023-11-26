@@ -9,6 +9,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 // 引入全局样式
 import '@/assets/styles/reset.css';
 import '@/assets/styles/base.less';
+import '@/assets/styles/flow-cell.less';
 
 // 引入路由
 import router from '@/router/index';

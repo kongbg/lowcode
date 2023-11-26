@@ -21,25 +21,29 @@
     </div>
 </template>
 <script>
-
-
+import { logout } from '@/api/admin/user/index.js'
 export default {
     name: "ChangeTheme",
     data() {
-        return {
-            
-        }
+        return {}
     },
-    mounted: () => {
-       
-    },
+    mounted: () => {},
     methods: {
-        logout() {
-            let service = this.$route.path.split('/')[1];
-            localStorage.clear();
-            this.$router.push({
-                path: `/${service}/login`
-            })
+        async logout() {
+            let [err, res] = await logout();
+            if (!err) {
+                this.$message({
+                    type: 'success',
+                    message: res.message
+                })
+                let service = this.$route.path.split('/')[1];
+                localStorage.clear();
+                setTimeout(()=>{
+                    this.$router.push({
+                        path: `/${service}/login`
+                    })
+                }, 1000)
+            }
         }
     }
 }

@@ -3,6 +3,7 @@
         <div class="header__wrapper">
             <Header></Header>
         </div>
+        
         <div class="content__wrapper">
             <div class="menu__wrapper">
                 <Menu></Menu>
@@ -18,6 +19,7 @@
 <script>
 import Header from "../Header"
 import Menu from "./Menu"
+
 export default {
     name: "pageContentWrapper",
     components: {
@@ -28,6 +30,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .page-content__wrapper {
+    user-select: none;
     .content__wrapper {
         display: flex;
         .menu__wrapper {}
