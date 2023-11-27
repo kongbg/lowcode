@@ -62,7 +62,6 @@ customMessage.stop = () => {
 // 给message实例绑定start方法
 customMessage.start = () => {
   instance.stopAndNext = false; // 放过本次拦截
-  return customMessage({})
 }
 
 export const message =  customMessage

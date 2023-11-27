@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { message } from '@/components/message/index.js';
+import { message as Message } from '@/components/message/index.js';
 import { deepClone } from '../utils/index.js';
 
 const Service = axios.create({
@@ -36,7 +36,7 @@ Service.interceptors.response.use(
             } else if (code == '401') { // 鉴权失败，退出登录
                 return [true, {...data, message}];
             } else {
-                message({
+                Message({
                     type: 'warning',
                     message,
                     center: false
@@ -54,19 +54,19 @@ Service.interceptors.response.use(
         /**
          * code = ERR_NETWORK 网络错误
          */
-        message({
+        Message({
             type: 'error',
             message: error.message
         })
-        // message.stop();
-        // message.error('111111111')
-        // message.error('22222222')
+        // Message.stop();
+        // Message.error('111111111')
+        // Message.error('22222222')
 
-        // message.error('33333333333')
-        // message.error('444444444')
-        // message.error('555555555')
+        // Message.error('33333333333')
+        // Message.error('444444444')
+        // Message.error('555555555')
         // setTimeout(() => {
-        //     message.error('1s 后提示！')
+        //     Message.error('1s 后提示！')
         // }, 1000);
         return [error, null];
     }

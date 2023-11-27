@@ -4,11 +4,10 @@ import App from './App.vue';
 
 // 自定义message组件，限制弹出频率
 import { message } from '@/components/message';
-Vue.prototype.$message = message;
-
 // 引入Element UI库和样式
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+Vue.prototype.$message = message;
 
 // 引入全局样式
 import '@/assets/styles/reset.css';

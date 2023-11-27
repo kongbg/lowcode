@@ -16,7 +16,7 @@ const routes = [
   //     redirect: '/design'
   // },
   {
-    // 超级关管理员后台
+    // 超级管理员后台
     path: "/admin",
     component: adminLayout,
     redirect: "/admin/Dashboard",

@@ -13,7 +13,7 @@ export const login = data => {
 }
 
 /**
- * 登出
+ * 退出
  * @param {*} data 
  * @returns 
  */
