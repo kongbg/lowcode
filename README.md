@@ -1,4 +1,4 @@
-# mytable2
+# lowcode
 
 ## Project setup
 ```

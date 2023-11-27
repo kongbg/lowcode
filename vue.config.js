@@ -16,6 +16,19 @@ module.exports = defineConfig({
       ],
     },
   },
+  devServer: {
+    port: 8080, // 端口
+    host: '', // 开发运行时域名
+    proxy: {
+      ['/api']: {
+        target: 'http://localhost:6080',
+        changeOrigin: true,
+        // pathRewrite: {
+        //   ['/api']: '',
+        // },
+      },
+    },
+  },
   chainWebpack: (config) => {
     //修改文件引入自定义路径
     config.resolve.alias

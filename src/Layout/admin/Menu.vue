@@ -27,8 +27,8 @@
             <i class="el-icon-location"></i>
             <span>demo管理</span>
           </template>
-          <el-menu-item @click="goToView({name: 'DemoManageTable-1'})" index="1-1">动态表格-1</el-menu-item>
-          <el-menu-item @click="goToView({name: 'DemoManageTable-2'})" index="1-2">动态表格-2</el-menu-item>
+          <el-menu-item @click="goToView({name: 'OrganizeManageOrganize'})" index="1-1">动态表格-1</el-menu-item>
+          <el-menu-item @click="goToView({name: 'OrganizeManageMember'})" index="1-2">动态表格-1</el-menu-item>
         </el-submenu>
         <!-- <el-menu-item index="3" disabled>
           <i class="el-icon-document"></i>

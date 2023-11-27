@@ -1,22 +1,39 @@
 <template>
     <div class="flow-page__wrapper">
-        <Mxgraph :nodeInfo="nodeInfo"></Mxgraph>
+        <Mxgraph ref="mxgraph" :nodeInfo="nodeInfo" @inited="inited"></Mxgraph>
     </div>
 </template>
 <script>
 import Mxgraph from '../mxgraph';
+import draggable from 'vuedraggable'
 export default {
     name: "Flow",
     components: {
-        Mxgraph
+        Mxgraph,
+        draggable
+    },
+    watch: {
+        cells(nval, oval) {
+            console.log('新增了一个节点:',nval, oval);
+            this.addFlowCell(this.cells);
+        }
     },
     data () {
         return {
-            nodeInfo: {}
+            nodeInfo: {},
+            cells:[]
         }
     },
     created () {
         this.nodeInfo = this.initNodes()
+    },
+    mounted () {
+        // document.querySelector('.box1').addEventListener('mousemove', ()=>{
+        //     console.log('mouseMove1')
+        // })
+        // document.querySelector('.box2').addEventListener('mousemove', ()=>{
+        //     console.log('mouseMove2')
+        // })
     },
     methods: {
         initNodes () {
@@ -98,12 +115,51 @@ export default {
             }
 
             return info;
+        },
+        addFlowCell(cells) {
+            this.$refs.mxgraph.addFlowCell(cells);
+        },
+        getComponentData() {
+            return {
+                on: {
+                    change: this.handleChange,
+                    input: this.inputChanged,
+                    mousemove: this.onmousemove,
+                },
+                attrs:{
+                    wrap: true
+                },
+                props: {
+                    value: this.activeNames
+                }
+            };
+        },
+        handleChange(){
+            console.log('handleChange')
+        },
+        inputChanged(){
+            console.log('inputChanged')
+        },
+        onmousemove() {
+            console.log('onmousemove1111')
+        },
+        // mxgraph初始化成功
+        inited(graph) {
+            this.$emit('inited', graph)
         }
+
+
     }
 }
 </script>
 <style lang="less" scoped>
 .flow-page__wrapper{
     height: 100%;
+    border: 1px solid #d8dbe1;
+    box-sizing: border-box;
+    position: relative;
+    /deep/.cell {
+        display: none !important;;
+    }
 }
 </style>

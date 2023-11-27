@@ -5,7 +5,7 @@
 <template>
     <div class="page-wrapper">
         <Breadcrumb v-bind="$attrs" v-if="showBread"></Breadcrumb>
-        <div class="content-wrapper scrollbar">
+        <div class="content-wrapper scrollbar" :style="{'padding': padding}">
             <slot></slot>
         </div>
     </div>
@@ -13,6 +13,12 @@
 <script>
 export default {
     name: 'PageWrapper',
+    props: {
+        padding: {
+            type: String,
+            default: '15px'
+        }
+    },
     computed: {
         showBread() {
             return !(this.$attrs.showBread === false)

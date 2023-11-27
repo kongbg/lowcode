@@ -75,7 +75,7 @@ export default {
             let [err, res] = await api(params);
             this.tableLoading = false;
             if (!err) {
-                let { total, list } = res.data;
+                let { total, list } = res;
                 if (handleResult && typeof handleResult == "function") {
                     list = handleResult(deepClone(list));
                 }

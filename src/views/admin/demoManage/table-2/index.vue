@@ -46,7 +46,7 @@
 <script>
 import { columns, pagination, mockTableData, filterConfig, filterData, filterRules } from './dict';
 export default {
-    name: 'Table-2',
+    name: 'OrganizeManageMember',
     components: {},
     props:{},
     data() {

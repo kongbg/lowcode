@@ -48,7 +48,7 @@
 <script>
 import { columns, pagination, mockTableData, filterConfig, filterData, filterRules, Enum } from './dict';
 export default {
-    name: 'Table-1',
+    name: 'OrganizeManageOrganize',
     components: {},
     props:{},
     data() {

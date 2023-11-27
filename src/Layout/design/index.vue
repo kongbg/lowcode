@@ -28,6 +28,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .page-content__wrapper {
+    user-select: none;
     .content__wrapper {
         display: flex;
         .menu__wrapper {}

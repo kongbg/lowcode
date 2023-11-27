@@ -43,36 +43,44 @@ export default {
                 let MxGraph = mxGraph;
                 let MxCodec = mxCodec;
                 var graph = this.graph = new MxGraph(container);
-                // 生成 Hello world!
-                var parent = graph.getDefaultParent();
-                // 表示mxgraph图准备更新前的状态
-                graph.getModel().beginUpdate();
-                try {
-                    let nodeList = this.nodeInfo.nodeList || [];
-                    let cellList = nodeList.filter(item => item.type == 1);
-                    let edgesList = nodeList.filter(item => item.type == 2);
-                    let insertNodes = {};
-                    cellList.forEach(item => {
-                        let { id, x, y, w, h, content, style } = item;
-                        let node = graph.insertVertex(parent, id, content, x, y, w, h, `nodeStyle_${id}`);
+                console.log('初始化mxGraph成功');
+                this.$emit('inited', graph);
+                // 生成节点
+                // var parent = graph.getDefaultParent();
+                // // 表示mxgraph图准备更新前的状态
+                // graph.getModel().beginUpdate();
+                // try {
+                //     let nodeList = this.nodeInfo.nodeList || [];
+                //     let cellList = nodeList.filter(item => item.type == 1);
+                //     let edgesList = nodeList.filter(item => item.type == 2);
+                //     let insertNodes = {};
+                //     cellList.forEach(item => {
+                //         let { id, x, y, w, h, content, style } = item;
+                //         let node = graph.insertVertex(parent, id, content, x, y, w, h, `nodeStyle_${id}`);
+                        
+                //         // 自定义节点类型 node-节点
+                //         node.type = 'node'
+                //         // todo style=null是设置默认样式
+                //         graph.getStylesheet().putCellStyle(`nodeStyle_${id}`, style);
 
-                        // todo style=null是设置默认样式
-                        graph.getStylesheet().putCellStyle(`nodeStyle_${id}`, style);
+                //         insertNodes[id] = node;
+                //     });
 
-                        insertNodes[id] = node;
-                    });
+                //     // todo 连线的样式修改
+                //     edgesList.forEach(item => {
+                //         let { id, source, target, content } = item;
+                //         let edge = graph.insertEdge(parent, id, content, insertNodes[source], insertNodes[target]);
+                //         // 自定义节点类型 edge-连线
+                //         edge.type = 'edge'
+                //     })
 
-                    // todo 连线的样式修改
-                    edgesList.forEach(item => {
-                        let { id, source, target, content} = item;
-                        graph.insertEdge(parent, id, content, insertNodes[source], insertNodes[target]);
-                    })
+                // } finally {
+                //     // 表示mxgraph图更新后的状态
+                //     graph.getModel().endUpdate();
+                // }
 
-                } finally {
-                    // Updates the display
-                    // 表示mxgraph图更新后的状态
-                    graph.getModel().endUpdate();
-                }
+                // 配置鼠标在画布中的事件
+                this.configMouseEvent();
 
 
                 // //  增加操作按钮
@@ -142,133 +150,64 @@ export default {
 
 
 
-           }
+            }
         },
-        initGraph2() {
-            if (!mxClient.isBrowserSupported()) {
-               // 判断是否支持mxgraph
-               mxUtils.error('Browser is not supported!', 200, false);
-           } else {
-                // 在容器中创建图表
-                let container = this.$refs.graphContainer;
-                let MxGraph = mxGraph;
-                let MxCodec = mxCodec;
-                var graph = this.graph = new MxGraph(container);
-                // 生成 Hello world!
-                var parent = graph.getDefaultParent();
-                // 表示mxgraph图准备更新前的状态
-                graph.getModel().beginUpdate();
-                try {
-                    /**
-                     *  生成节点
-                     *  insertVertex
-                     *  参数1：parents 生成节点要插入的父级容器
-                     *  参数2：null 此处可以设置节点的id，便于识别节点，null为默认id
-                     *  参数3：label 此处设置节点的内容
-                     *  参数4：设置节点大小及节点在父级容器中的相对位置
-                     */
-                    // var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 200, 80, 30, "fillColor=#3CAEA3;strokeColor=white;fontStyle=1;fontColor=white;rounded=1;fontSize=8;");
-                    var v2 = graph.insertVertex(parent, null, 'World', 200, 150, 80, 30, 'nodeStyle');
-                    //定义节点样式
-                    var nodeStyle = {};
-                    nodeStyle[mxConstants.STYLE_FILLCOLOR] = "#3CAEA3";
-                    nodeStyle[mxConstants.STYLE_FONTSIZE] = 15;
-                    // nodeStyle[mxConstants.STYLE_STROKE_COLOR] = "white";
-                    nodeStyle[mxConstants.STYLE_FONTCOLOR] = "white";
-                    nodeStyle[mxConstants.STYLE_ROUNDED] = 1;
+        // 配置鼠标在画布中的事件
+        configMouseEvent() {
+            this.graph.addMouseListener(
+                {
+                    // currentState: null,
+                    // previousStyle: null,
 
-                    // console.log('nodeStyle:', mxConstants, nodeStyle)
+                    mouseDown: (sender, evt) => {
+                        console.log('mouseDown:', evt)
+                        if (!evt.state) {
+                            console.log('点击了画布')
+                        } else if (evt.state.cell.type == 'edge') {
+                            console.log('点击了连线', evt.state.cell)
+                        } else if (evt.state.cell.type == 'node') {
+                            console.log('点击了节点', evt.state.cell)
+                        }
+                    },
 
-                    // 把定义好的样式object push到stylesheet
-                    graph.getStylesheet().putCellStyle("nodeStyle", nodeStyle)
+                    mouseMove: (sender, me) => {
+                        // if (this.drag) {
+                        //     console.log('有东西',Math.ceil(me.graphX), Math.ceil(me.graphY))
+                        // } else {
+                        //     console.log('无东西')
+                        // }
+                        // this.graphX = Math.ceil(me.graphX)
+                        // this.graphY = Math.ceil(me.graphY)
+                        // console.log(Math.ceil(me.graphX), Math.ceil(me.graphY))
+                    },
 
-                    // var v3 = graph.insertVertex(parent, null, 'everyBody!', 300, 350, 60, 30);
-                    /**
-                    *  生成边（连线）
-                    *  insertEdge
-                    *  参数1：parents 生成边要插入的父级容器
-                    *  参数2：null 此处可以设置节点的id，便于识别边，null为默认id
-                    *  参数3：label 此处设置节点的内容
-                    *  参数4：边的起始节点和终止节点
-                    */
-                    // graph.insertEdge(parent, null, '', v1, v2);
-                    // graph.insertEdge(parent, null, '', v2, v3);
-                    // graph.insertEdge(parent, null, '', v1, v3);
-                } finally {
-                    // Updates the display
-                    // 表示mxgraph图更新后的状态
-                    graph.getModel().endUpdate();
-                }
-
-
-                // //  增加操作按钮
-                // //选中所有
-                // this.$refs.buttons.appendChild(
-                //     mxUtils.button('Select all', function() {
-                //     graph.selectAll()
-                //     })
-                // )
-
-                // //选择一个
-                // this.$refs.buttons.appendChild(
-                //     mxUtils.button('Choose one', function() {
-                //     graph.selectCell()
-                //     })
-                // )
-
-                // //取消选择
-                // this.$refs.buttons.appendChild(
-                //     mxUtils.button('Deselect', function() {
-                //     var cells = graph.getSelectionCells()
-                //     graph.removeSelectionCells(cells)
-                //     })
-                // )
-
-                // //删除所选
-                // this.$refs.buttons.appendChild(
-                //     mxUtils.button('Delete', function() {
-                //     var cells = graph.getSelectionCells()
-                //     graph.removeCells(cells)
-                //     })
-                // )
-
-                // //放大节点
-                // this.$refs.buttons.appendChild(
-                //     mxUtils.button('ZoomIn', function() {
-                //     graph.zoomIn()
-                //     })
-                // )
-
-                // //缩小节点
-                // this.$refs.buttons.appendChild(
-                //     mxUtils.button('ZoomOut', function() {
-                //     graph.zoomOut()
-                //     })
-                // )
-
-                // //还原节点
-                // this.$refs.buttons.appendChild(
-                //     mxUtils.button('ZoomActual', function() {
-                //     graph.zoomActual()
-                //     })
-                // )
-
-                // //清空画板
-                // this.$refs.buttons.appendChild(
-                //     mxUtils.button('Clear', function() {
-                //     graph.removeCells(graph.getChildVertices(graph.getDefaultParent()))
-                //     })
-                // )
-
-
-
-                //定义布局
-                // var layout = new mxHierarchicalLayout(graph);
-                // layout.execute(parent)
-
-
-
-           }
+                    mouseUp: (sender, evt) => {
+                        let { graphX, graphY } = evt;
+                        console.log('落点坐标：', graphX, graphY)
+                        // if (evt.sourceState === undefined) {
+                        //     return false
+                        // } else {
+                        //     var cell = evt.sourceState.cell
+                        //     if (cell) {
+                        //         if (cell.edge && cell.edge === true) {
+                        //             // 点击的是连线
+                        //             localStorage.setItem('currOptEdgeId', cell.id)
+                        //         } else if (cell.vertex && cell.vertex === true) {
+                        //             // 点击的是节点
+                        //             localStorage.setItem('currOptInstId', cell.id)
+                        //         } else {
+                        //             // 点击的是其他元素
+                        //             console.log('点击了其他元素')
+                        //         }
+                        //     } else {
+                        //         this.$message.error('请选择节点或者连线')
+                        //     }
+                        // }
+                    }
+                })
+        },
+        addFlowCell(data) {
+            console.log('addFlowCell:', this.graph,this.graph.lastEvent?.clientX,this.graph.lastEvent?.clientY)
         }
     }
 }
@@ -283,5 +222,4 @@ export default {
         background-image: url('../../../../../assets/icons/grid.gif');
     }
 }
-
 </style>
