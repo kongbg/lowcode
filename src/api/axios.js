@@ -51,11 +51,23 @@ Service.interceptors.response.use(
         }
     },
     error => {
-        console.log('响应拦截:', error)
-        console.log('TODO:加弹窗提示', error.message)
         /**
          * code = ERR_NETWORK 网络错误
          */
+        message({
+            type: 'error',
+            message: error.message
+        })
+        // message.stop();
+        // message.error('111111111')
+        // message.error('22222222')
+
+        // message.error('33333333333')
+        // message.error('444444444')
+        // message.error('555555555')
+        // setTimeout(() => {
+        //     message.error('1s 后提示！')
+        // }, 1000);
         return [error, null];
     }
 )

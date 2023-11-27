@@ -22,6 +22,7 @@
 </template>
 <script>
 import { logout } from '@/api/admin/user/index.js'
+import { message } from '@/components/message/index.js';
 export default {
     name: "ChangeTheme",
     data() {
@@ -30,6 +31,8 @@ export default {
     mounted: () => {},
     methods: {
         async logout() {
+            // 拦截 logout 的全局报错弹窗
+            message.stop();
             let [err, res] = await logout();
             if (!err) {
                 this.$message({
@@ -43,6 +46,10 @@ export default {
                         path: `/${service}/login`
                     })
                 }, 1000)
+            } else {
+                // 放开 logout 的全局报错弹窗
+                message.start();
+                message.error('在这里处理报错')
             }
         }
     }
