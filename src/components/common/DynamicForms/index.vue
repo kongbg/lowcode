@@ -164,6 +164,19 @@ export default {
                     return false;
                 }
             });
+        },
+        // 暴露给外部获取表单数据的方法
+        getData () {
+            return new Promise((resolve, reject) => {
+                this.$refs.dynamicFrom.validate((valid) => {
+                    if (valid) {
+                        resolve([null, this.formData]);
+                    } else {
+                        console.warn('表单检验不通过')
+                        resolve([{message: '表单检验不通过'}, {}]);
+                    }
+                });
+            })
         }
     }
 }

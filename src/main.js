@@ -1,6 +1,7 @@
 // 引入Vue框架和根组件
 import Vue from 'vue';
 import App from './App.vue';
+import store from './store/index';
 
 // 自定义message组件，限制弹出频率
 import { message } from '@/components/message';
@@ -35,5 +36,6 @@ Vue.use(requireComponent);
 // 创建Vue实例
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app');

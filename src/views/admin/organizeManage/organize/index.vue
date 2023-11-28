@@ -20,7 +20,7 @@
                         >新增组织</el-button>
                     </div>
                     <div class="head-container">
-                        <el-tree :data="data" node-key="id" default-expand-all :expand-on-click-node="false">
+                        <el-tree :data="organizetree" node-key="id" default-expand-all :expand-on-click-node="false" :props="{label: 'name', children: 'children'}">
                             <div class="custom-tree-node" slot-scope="{ node, data }">
                                 <div class="node-name" @click="elpopovers=[];nodeClick(node, data)">{{ node.label }}</div>
                                 <el-popover
@@ -86,7 +86,7 @@
 
         <!-- 新增组织 -->
         <Dialog :title="organizeTitle" width="30%" :visible.sync="organizeDialog" @confirm="organizeConfirm">
-            <div>
+            
                 <DynamicForms
                     :config="addItemConfig"
                     :rules="addItemRules"
@@ -95,7 +95,7 @@
                     label-width="120px"
                     size="small"
                 ></DynamicForms>
-            </div>
+            
         </Dialog>
     </PageWrapper>
 </template>
@@ -105,6 +105,8 @@ import { columns, pagination, mockTableData, filterConfig, filterData, filterRul
     addItemRules,
     addItemData
 } from './dict';
+import { mapGetters } from "vuex";
+import { addOrganize, updateOrganize } from '@/api/admin/organizeManage/index.js';
 export default {
     name: 'OrganizeManageOrganize',
     components: {},
@@ -168,6 +170,7 @@ export default {
         }
     },
     computed: {
+        ...mapGetters(["organizetree"]),
         organizeName: {
             set(val) {
                 organizeName = val;
@@ -208,15 +211,35 @@ export default {
             // this.$refs.pageList.updateData({action: "add"});
         },
         // 弹窗新增
-        addItemOnPage () {
+        addItemOnPage (pid='') {
             this.addItemData = {};
             this.organizeDialog = true;
             this.organizeTitle = '新增组织';
             this.organizeAction = 'add';
+            this.parentId = pid;
         },
         // 弹窗新增 confirm 事件
-        organizeConfirm (slotComps, dialogComp) {
-            console.log(this.organizeAction, this.parentId, slotComps, dialogComp)
+        async organizeConfirm (slotComps, dialogComp) {
+            let componentInstance = slotComps.default[0].componentInstance;
+            let [err, res] = await componentInstance.getData();
+            if (!err) {
+                if (this.organizeAction == 'add') {
+                    let [err2, res2] = await addOrganize(res);
+                    if (this.parentId) res.pid = this.parentId;
+                    if (!err2) {
+                        this.organizeDialog = false;
+                        this.$message.success('新建成功！');
+                    }
+                } else {
+                    let [err2, res2] = await updateOrganize(res);
+                    if (!err2) {
+                        this.organizeDialog = false;
+                        this.$message.success('编辑成功！');
+                        // 获取组织树形结构
+                        this.$store.dispatch('getOrganizeTree')
+                    }
+                }
+            }
         },
         // 编辑
         editItem(info) {
@@ -237,12 +260,11 @@ export default {
             this.organizeDialog = true;
             this.organizeTitle = '编辑组织';
             this.organizeAction = 'edit';
-            this.addItemData.name = '1312312';
+            this.addItemData = data
         },
         // 弹窗新增下级组织
         addItemOnPage2(info, data) {
-            this.parentId = 111;
-            this.addItemOnPage();
+            this.addItemOnPage(data.id);
         },
         // 删除
         deleteItem(info) {

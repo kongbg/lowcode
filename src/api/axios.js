@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { message as Message } from '@/components/message/index.js';
 import { deepClone } from '../utils/index.js';
+import router from '@/router/index.js';
 
 const Service = axios.create({
     baseUrl: 'http://localhost:6080',
@@ -34,6 +35,11 @@ Service.interceptors.response.use(
             if (code == 200) {
                 return [null, {...data, message}];
             } else if (code == '401') { // 鉴权失败，退出登录
+                console.log('鉴权失败，退出登录')
+                localStorage.clear()
+                router.push({
+                    path:'/admin/login'
+                })
                 return [true, {...data, message}];
             } else {
                 Message({

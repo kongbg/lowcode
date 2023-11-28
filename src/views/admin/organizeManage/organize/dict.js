@@ -6,7 +6,7 @@
 
 // 字典
 export let Enum = {
-    status : [
+    status: [
         {
             value: '1',
             label: '开启'
@@ -14,6 +14,24 @@ export let Enum = {
         {
             value: '0',
             label: '停用'
+        }
+    ],
+    types: [
+        {
+            value: 1,
+            label: '集团'
+        },
+        {
+            value: 2,
+            label: '公司'
+        },
+        {
+            value: 3,
+            label: '部门'
+        },
+        {
+            value: 4,
+            label: '团队'
         }
     ]
 }
@@ -230,12 +248,32 @@ export const addItemConfig = [
         label: '组织类型',
         type: 'select',
         prop: 'type',
+        options: Enum.types
     },
     {
-        label: '状态',
-        type: 'select',
-        prop: 'status',
-        options: Enum.status
+        label: '法人',
+        type: 'input',
+        prop: 'legal'
+    },
+    {
+        label: '法人电话',
+        type: 'input',
+        prop: 'legal_phone',
+    },
+    {
+        label: '法人身份证',
+        type: 'input',
+        prop: 'legal_card_number',
+    },
+    {
+        label: '负责人',
+        type: 'input',
+        prop: 'leader'
+    },
+    {
+        label: '负责人电话',
+        type: 'input',
+        prop: 'leader_phone',
     }
 ]
 // 新增组织表单校验配置

@@ -21,14 +21,15 @@
 
 <script>
 import { login } from '@/api/admin/user/index.js'
+import { mapActions } from 'vuex'
 export default {
     name: 'AdminLogin',
     data () {
         return {
             loading: false,
             form: {
-                userName: '',
-                passWord: ''
+                userName: 'admin',
+                passWord: '123456'
             },
             rules: {
                 userName: [
@@ -41,6 +42,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions(['setUserInfo']),
         async login() {
             this.loading = true;
             let [err, res] = await login(this.form);
@@ -51,6 +53,9 @@ export default {
                     message: '登录成功！'
                 })
                 let { token, userInfo } = res;
+
+                this.setUserInfo(userInfo);
+
                 let fullpath = this.$route.query.fullpath;
                 localStorage.setItem('Platform-token', token);
                 localStorage.setItem('Platform-userInfo', JSON.stringify(userInfo));

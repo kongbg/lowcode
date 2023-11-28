@@ -40,7 +40,7 @@ export default {
                     type: 'success',
                     message: res.message
                 })
-                
+
                 localStorage.clear();
                 setTimeout(()=>{
                     this.$router.push({
@@ -50,27 +50,34 @@ export default {
             } else {
                 // 放开 logout 的全局报错弹窗
                 message.start();
-                this.$confirm('退出失败, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    message({
-                        type: 'success',
-                        message: '退出成功!'
-                    });
-                    localStorage.clear();
-                    setTimeout(()=>{
-                        this.$router.push({
-                            path: `/${service}/login`
-                        })
-                    }, 1000)
-                }).catch(() => {
-                    message({
-                        type: 'info',
-                        message: '已取消操作'
-                    });          
-                });
+                localStorage.clear();
+                setTimeout(()=>{
+                    this.$router.push({
+                        path: `/${service}/login`
+                    })
+                }, 1000)
+
+                // this.$confirm('退出失败, 是否继续?', '提示', {
+                //     confirmButtonText: '确定',
+                //     cancelButtonText: '取消',
+                //     type: 'warning'
+                // }).then(() => {
+                //     message({
+                //         type: 'success',
+                //         message: '退出成功!'
+                //     });
+                //     localStorage.clear();
+                //     setTimeout(()=>{
+                //         this.$router.push({
+                //             path: `/${service}/login`
+                //         })
+                //     }, 1000)
+                // }).catch(() => {
+                //     message({
+                //         type: 'info',
+                //         message: '已取消操作'
+                //     });
+                // });
             }
         }
     }
