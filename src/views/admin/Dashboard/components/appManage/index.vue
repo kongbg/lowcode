@@ -2,7 +2,7 @@
     <div class="app-manage__wrapper">
         <ItemCard class="app-item-card">
             <div class="items">
-                <div class="app-item" v-for="item in 10">
+                <div class="app-item" v-for="item in 0">
                     <i class="el-icon-more" @click.stop="setAppInfo"></i>
                     <div class="icon">
                         <img src="@/assets/icons/logo.png" alt="">
@@ -14,22 +14,11 @@
                 </div>
             </div>
         </ItemCard>
-        <Dialog title="新建应用" width="30%" :visible.sync="dialogVisible" :show-close="false" @confirm="confirm">
+        <Dialog :title="appTitle" width="30%" :visible.sync="dialogVisible" :show-close="false" @confirm="confirm">
             <DynamicForms
                 :config="config"
                 :rules="rules"
-                :value.sync="defaultData"
-                label-width="120px"
-                size="small"
-            >
-            </DynamicForms>
-        </Dialog>
-
-        <Dialog title="编辑应用信息" width="30%" :visible.sync="editDialog" :show-close="false" @confirm="confirm">
-            <DynamicForms
-                :config="config"
-                :rules="rules"
-                :value.sync="defaultData"
+                :model="defaultData"
                 label-width="120px"
                 size="small"
             >
@@ -39,6 +28,8 @@
 </template>
 <script>
 import { config, defaultData, rules } from './dict';
+import { addApp, updateApp } from '@/api/admin/app/index.js'
+import { mapGetters } from 'vuex'
 export default {
     name: 'AppManage',
     props: {
@@ -62,21 +53,49 @@ export default {
             rules,
             defaultData,
 
-            editDialog: false,
+            appTitle: '新建应用',
+            appAction: 'add',
+
         }
     },
+    computed: {
+        ...mapGetters(['currentOrganize'])
+    },
     methods: {
+        async getApps() {
+
+        },
         addApp () {
+            this.appAction = 'add';
+            this.defaultData = {};
+            this.appTitle = '新建应用';
             this.dialogVisible = true;
         },
-        async confirm (slotComp) {
-            let { valid, data } = await slotComp.getFormData();
-            if (valid) {
-                this.dialogVisible = false;
-            }
+        setAppInfo(data) {
+            his.appAction = 'edit';
+            this.defaultData = data;
+            this.appTitle = '编辑应用';
+            this.dialogVisible = true;
         },
-        setAppInfo () {
-            this.editDialog = true;
+        async confirm (slotComps) {
+            let componentInstance = slotComps.default[0].componentInstance;
+            let [err, res] = await componentInstance.getData();
+            if (!err) {
+                if (this.appAction == 'add') {
+                    res.organize_id = this.currentOrganize[this.currentOrganize.length - 1];
+                    let [err2, res2] = await addApp(res);
+                    if (!err2) {
+                        this.dialogVisible = false;
+                        this.$message.success('新建成功！');
+                    }
+                } else {
+                    let [err2, res2] = await updateApp(res);
+                    if (!err2) {
+                        this.dialogVisible = false;
+                        this.$message.success('编辑成功！');
+                    }
+                }
+            }
         }
     }
 }

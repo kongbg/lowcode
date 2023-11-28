@@ -37,3 +37,16 @@ export const updateOrganize = data => {
         data
     })
 }
+
+/**
+ * 删除组织
+ * @param {*} data
+ * @returns
+ */
+export const deleteOrganize = data => {
+    return axios({
+        url: '/api/platform/organize/delete',
+        method: 'post',
+        data
+    })
+}

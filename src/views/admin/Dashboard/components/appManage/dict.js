@@ -1,70 +1,44 @@
 export const config = [
     {
-        label: '应用名称',
+        label: '名称',
         type: 'input',
         prop: 'name'
     },
     {
-        label: '选择框',
+        label: '分类',
         type: 'select',
-        prop: 'name2',
-        disabled: true,
+        prop: 'type',
         options: [
             {
                 value: '1',
-                label: '开启'
+                label: '分类1'
             },
             {
-                value: '0',
-                label: '关闭'
+                value: '2',
+                label: '分类2'
             }
         ]
     },
     {
-        label: '应用名称',
-        type: 'date',
-        prop: 'name3'
+        label: '图标',
+        type: 'input',
+        prop: 'icon'
     },
     {
-        label: '应用名称',
-        type: 'switch',
-        prop: 'name4'
-    },
-    {
-        label: '多选',
-        type: 'checkbox',
-        prop: 'name5',
-        options: [
-            {
-                value: '1',
-                label: '开启'
-            },
-            {
-                value: '0',
-                label: '关闭'
-            }
-        ]
-    },
-    {
-        label: '单选',
+        label: '状态',
         type: 'radio',
-        prop: 'name6',
+        prop: 'status',
         options: [
             {
-                value: '1',
+                value: 1,
                 label: '开启'
             },
             {
-                value: '0',
+                value: 0,
                 label: '关闭'
             }
         ]
-    },
-    {
-        label: '应用名称',
-        type: 'textarea',
-        prop: 'name7'
-    },
+    }
     
 ]
 export const rules = {
@@ -75,6 +49,5 @@ export const rules = {
 
 }
 export const defaultData = {
-    name: '123',
-    name5: []
+    status: 1
 }

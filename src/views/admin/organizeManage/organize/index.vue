@@ -5,43 +5,33 @@
             <el-row :gutter="0">
                 <el-col class="organize-tree" :xs="24" :sm="24" :md="8" :lg="6" :xl="5">
                     <div class="head-container">
-                        <el-input
-                            v-model="deptName"
-                            placeholder="请输入部门名称"
-                            clearable
-                            size="small"
-                            prefix-icon="el-icon-search"
-                        />
-                        <el-button
-                            style="margin-left: 10px"
-                            type="primary"
-                            size="small"
-                            @click="addItemOnPage"
-                        >新增组织</el-button>
+                        <el-input v-model="deptName" placeholder="请输入部门名称" clearable size="small"
+                            prefix-icon="el-icon-search" />
+                        <el-button style="margin-left: 10px" type="primary" size="small"
+                            @click="addItemOnPage">新增组织</el-button>
                     </div>
                     <div class="head-container">
-                        <el-tree :data="organizetree" node-key="id" default-expand-all :expand-on-click-node="false" :props="{label: 'name', children: 'children'}">
+                        <el-tree :data="organizetree" node-key="id" default-expand-all :expand-on-click-node="false"
+                            :props="{ label: 'name', children: 'children' }">
                             <div class="custom-tree-node" slot-scope="{ node, data }">
-                                <div class="node-name" @click="elpopovers=[];nodeClick(node, data)">{{ node.label }}</div>
-                                <el-popover
-                                    class="actions"
-                                    placement="bottom"
-                                    width="160"
-                                    trigger="click"
-                                    v-model="elpopovers[node.id]"
-                                >
+                                <div class="node-name" @click="elpopovers = []; nodeClick(node, data)">{{ node.label }}</div>
+                                <el-popover class="actions" placement="bottom" width="160" trigger="click"
+                                    v-model="elpopovers[node.id]">
                                     <div>
                                         <div>
-                                            <el-button type="text" size="mini" @click.stop="editItemOnPage(node, data)">编辑组织信息</el-button>
+                                            <el-button type="text" size="mini"
+                                                @click.stop="editItemOnPage(node, data)">编辑组织信息</el-button>
                                         </div>
                                         <div>
-                                            <el-button type="text" size="mini" @click.stop="addItemOnPage2(node, data)">添加组织</el-button>
+                                            <el-button type="text" size="mini"
+                                                @click.stop="addItemOnPage2(node, data)">添加组织</el-button>
                                         </div>
                                         <div>
-                                            <el-button type="text" size="mini" @click.stop="deleteItemOrganize(node, data)">删除组织</el-button>
+                                            <el-button type="text" size="mini"
+                                                @click.stop="deleteItemOrganize(node, data)">删除组织</el-button>
                                         </div>
                                     </div>
-                                    <span slot="reference" @click="elpopovers=[node.id]">...</span>
+                                    <span slot="reference" @click="elpopovers = [node.id]">...</span>
                                 </el-popover>
                             </div>
                         </el-tree>
@@ -85,28 +75,21 @@
         </div>
 
         <!-- 新增组织 -->
-        <Dialog :title="organizeTitle" width="30%" :visible.sync="organizeDialog" @confirm="organizeConfirm">
-            
-                <DynamicForms
-                    :config="addItemConfig"
-                    :rules="addItemRules"
-                    :model="addItemData"
-                    mode=""
-                    label-width="120px"
-                    size="small"
-                ></DynamicForms>
-            
+        <Dialog :title="organizeTitle" width="500px" :visible.sync="organizeDialog" @confirm="organizeConfirm">
+            <DynamicForms :config="addItemConfig" :rules="addItemRules" :model="addItemData" mode="" label-width="120px"
+                size="small"></DynamicForms>
         </Dialog>
     </PageWrapper>
 </template>
 <script>
-import { columns, pagination, mockTableData, filterConfig, filterData, filterRules, Enum,
+import {
+    columns, pagination, mockTableData, filterConfig, filterData, filterRules, Enum,
     addItemConfig,
     addItemRules,
     addItemData
 } from './dict';
 import { mapGetters } from "vuex";
-import { addOrganize, updateOrganize } from '@/api/admin/organizeManage/index.js';
+import { addOrganize, updateOrganize, deleteOrganize } from '@/api/admin/organizeManage/index.js';
 export default {
     name: 'OrganizeManageOrganize',
     components: {},
@@ -122,41 +105,6 @@ export default {
             expands: ['1'],
 
             deptName: '',
-            data: [{
-                id: 1,
-                label: '一级 1',
-                children: [{
-                    id: 4,
-                    label: '二级 1-1',
-                    children: [{
-                        id: 9,
-                        label: '三级 1-1-1'
-                    }, {
-                        id: 10,
-                        label: '三级 1-1-2'
-                    }]
-                }]
-            }, {
-                id: 2,
-                label: '一级 2',
-                children: [{
-                    id: 5,
-                    label: '二级 2-1'
-                }, {
-                    id: 6,
-                    label: '二级 2-2'
-                }]
-            }, {
-                id: 3,
-                label: '一级 3',
-                children: [{
-                    id: 7,
-                    label: '二级 3-1'
-                }, {
-                    id: 8,
-                    label: '二级 3-2'
-                }]
-            }],
 
             organizeDialog: false,
             parentId: '',
@@ -167,24 +115,31 @@ export default {
             addItemData,
 
             elpopovers: [],
+
+            organizeName: ''
         }
     },
     computed: {
         ...mapGetters(["organizetree"]),
-        organizeName: {
-            set(val) {
-                organizeName = val;
-            },
-            get() {
-                let id = this.expands[0] || '';
-                let info = this.data.find(item=>item.id==id);
-                return info.label || '';
-            }
-        }
     },
-    created() { },
+    async created() {
+        // 获取组织树形结构
+        await this.$store.dispatch('getOrganizeTree');
+        // 初始化组织名称
+        this.initOrganizeName();
+    },
     mounted() { },
     methods: {
+        // 初始化组织名称
+        initOrganizeName() {
+            if (this.organizetree.length) {
+                this.organizeName = this.organizetree[0].name;
+            }
+        },
+        // 树形节点点击
+        nodeClick(data) {
+            this.organizeName = data.label;
+        },
         // 获取列表数据
         getData() {
             return new Promise(resolve => {
@@ -211,24 +166,27 @@ export default {
             // this.$refs.pageList.updateData({action: "add"});
         },
         // 弹窗新增
-        addItemOnPage (pid='') {
+        addItemOnPage(pid = '') {
             this.addItemData = {};
             this.organizeDialog = true;
             this.organizeTitle = '新增组织';
             this.organizeAction = 'add';
-            this.parentId = pid;
+            this.parentId = typeof pid == 'number' ? pid : '';
         },
         // 弹窗新增 confirm 事件
-        async organizeConfirm (slotComps, dialogComp) {
+        async organizeConfirm(slotComps, dialogComp) {
             let componentInstance = slotComps.default[0].componentInstance;
             let [err, res] = await componentInstance.getData();
             if (!err) {
                 if (this.organizeAction == 'add') {
-                    let [err2, res2] = await addOrganize(res);
+                    console.log('this.parentId:', this.parentId)
                     if (this.parentId) res.pid = this.parentId;
+                    let [err2, res2] = await addOrganize(res);
                     if (!err2) {
                         this.organizeDialog = false;
                         this.$message.success('新建成功！');
+                        // 获取组织树形结构
+                        this.$store.dispatch('getOrganizeTree')
                     }
                 } else {
                     let [err2, res2] = await updateOrganize(res);
@@ -256,7 +214,7 @@ export default {
             // this.$refs.pageList.updateData({action: "edit", info, key});
         },
         // 弹窗编辑
-        editItemOnPage (info, data) {
+        editItemOnPage(info, data) {
             this.organizeDialog = true;
             this.organizeTitle = '编辑组织';
             this.organizeAction = 'edit';
@@ -276,13 +234,16 @@ export default {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(() => {
+            }).then(async () => {
                 // todo: 调接口
-                this.$refs.pageList.updateData({ action: "delete", info, key });
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
+                let [err, res] = await deleteOrganize(info.id);
+                if (!err) {
+                    // this.$refs.pageList.updateData({ action: "delete", info, key });
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -291,17 +252,23 @@ export default {
             });
         },
         // 删除组织
-        deleteItemOrganize () {
+        deleteItemOrganize(info, data) {
+            console.log(info, data)
             this.$confirm('此操作将永久删除该组织, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(() => {
-                // todo: 调接口
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
+            }).then(async () => {
+                let id = data.id
+                let [err, res] = await deleteOrganize({ id });
+                if (!err) {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    // 获取组织树形结构
+                    this.$store.dispatch('getOrganizeTree')
+                }
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -320,10 +287,7 @@ export default {
             })
         },
 
-        // 树形节点点击
-        nodeClick(data) {
-            this.organizeName = data.label;
-        }
+
     }
 }
 </script>
@@ -331,22 +295,27 @@ export default {
 .organize-manage__wrapper {
     .content-main {
         display: flex;
+
         .el-row {
             margin-bottom: 20px;
+
             &:last-child {
-            margin-bottom: 0;
+                margin-bottom: 0;
             }
         }
+
         .organize-tree {
             background: #fff;
             border-right: 1px solid #eee;
             padding: 0 15px;
             height: 100%;
+
             .head-container {
                 margin: 20px 0;
                 display: flex;
                 align-items: center;
                 width: 100%;
+
                 .el-tree {
                     width: 100%;
                     color: #606266;
@@ -355,11 +324,14 @@ export default {
                     .custom-tree-node {
                         width: 100%;
                         display: flex;
+
                         .node-name {
                             flex: 1;
                         }
+
                         .actions {
                             width: 24px;
+
                             .el-popover__reference {
                                 display: block;
                                 line-height: 9px;
@@ -372,6 +344,7 @@ export default {
                 }
             }
         }
+
         .organize-list {
             .organize-name {
                 background: #fff;

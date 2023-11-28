@@ -22,7 +22,7 @@
 
         <ItemCard v-if="organizetree.length" class="item-card" title="常用应用">
             <div class="items">
-                <div class="app-item" v-for="item in 10" @click="toView()">
+                <div class="app-item" v-for="item in 0" @click="toView()">
 
                     <div class="icon">
                         <img src="@/assets/icons/logo.png" alt="">

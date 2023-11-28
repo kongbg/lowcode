@@ -55,7 +55,7 @@
                 <!-- 单选 -->
                 <template v-if="item.type === 'radio'">
                     <el-radio-group v-model="formData[item.prop]">
-                        <el-radio v-for="(op,i) in item.options" :key="i" :label="op.label" ></el-radio>
+                        <el-radio v-for="(op,i) in item.options" :key="i" :label="op.value" >{{ op.label }}</el-radio>
                     </el-radio-group>
                 </template>
                 <!-- 文本域 -->
@@ -101,6 +101,7 @@ export default {
         },
         formData () {
             let data = this.$attrs.model;
+            debugger
             // 补全formData未定义的默认值
             this.config.forEach(item => {
                 let { prop, type } = item;
@@ -155,6 +156,8 @@ export default {
         cancel () {
             this.$emit('cancel')
         },
+        // TODO: 表头查询或者详情提交调用submit
+        // 需要重构，改成标准返回 [err, res]
         submit () {
             this.$refs.dynamicFrom.validate((valid) => {
                 if (valid) {
