@@ -24,3 +24,16 @@ export const logout = data => {
         data
     })
 }
+
+/**
+ * 获取用户列表
+ * @param {*} data 
+ * @returns 
+ */
+export const getUserList = data => {
+    return axios({
+        url: '/api/platform/user/list',
+        method: 'get',
+        data
+    })
+}

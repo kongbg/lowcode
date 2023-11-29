@@ -39,7 +39,7 @@
                 </el-col>
                 <el-col class="organize-list" :xs="24" :sm="24" :md="16" :lg="18" :xl="19">
                     <div class="organize-name"> {{ organizeName }}</div>
-                    <PageList ref="pageList" row-key="id" :columns="columns" :api="getData" :pagination="pagination"
+                    <PageList ref="pageList" row-key="id" :columns="columns" :api="getUserList" :pagination="pagination"
                         :handleResult="handleResult" :filterConfig="filterConfig" :filterRules="filterRules"
                         :filterData="filterData" :expand-row-keys="expands" border>
                         <div class="table-tools" slot="table-tools">
@@ -90,6 +90,7 @@ import {
 } from './dict';
 import { mapGetters } from "vuex";
 import { addOrganize, updateOrganize, deleteOrganize } from '@/api/admin/organizeManage/index.js';
+import { getUserList } from '@/api/admin/user/index.js'
 export default {
     name: 'OrganizeManageOrganize',
     components: {},
@@ -102,6 +103,7 @@ export default {
             filterConfig,
             filterRules,
             filterData,
+            getUserList,
             expands: ['1'],
 
             deptName: '',
@@ -124,7 +126,7 @@ export default {
     },
     async created() {
         // 获取组织树形结构
-        await this.$store.dispatch('getOrganizeTree');
+        await this.$store.dispatch('platform/getOrganizeTree');
         // 初始化组织名称
         this.initOrganizeName();
     },
@@ -139,16 +141,6 @@ export default {
         // 树形节点点击
         nodeClick(data) {
             this.organizeName = data.label;
-        },
-        // 获取列表数据
-        getData() {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve(
-                        [null, { data: { total: 4, list: mockTableData } }]
-                    )
-                }, 100)
-            })
         },
         // 处理列表返回数据
         handleResult(result) {
@@ -186,7 +178,7 @@ export default {
                         this.organizeDialog = false;
                         this.$message.success('新建成功！');
                         // 获取组织树形结构
-                        this.$store.dispatch('getOrganizeTree')
+                        this.$store.dispatch('platform/getOrganizeTree')
                     }
                 } else {
                     let [err2, res2] = await updateOrganize(res);
@@ -194,7 +186,7 @@ export default {
                         this.organizeDialog = false;
                         this.$message.success('编辑成功！');
                         // 获取组织树形结构
-                        this.$store.dispatch('getOrganizeTree')
+                        this.$store.dispatch('platform/getOrganizeTree')
                     }
                 }
             }
@@ -267,7 +259,7 @@ export default {
                         message: '删除成功!'
                     });
                     // 获取组织树形结构
-                    this.$store.dispatch('getOrganizeTree')
+                    this.$store.dispatch('platform/getOrganizeTree')
                 }
             }).catch(() => {
                 this.$message({

@@ -46,7 +46,7 @@ export const columns = [
     // },
     {
         label: '用户名',
-        prop: 'name',
+        prop: 'username',
         // width: '180',
     },
     {
@@ -134,7 +134,7 @@ export const filterConfig = [
     {
         label: '组织名称',
         type: 'input',
-        prop: 'name'
+        prop: 'username'
     },
     {
         label: '组织类型',
@@ -227,7 +227,7 @@ export const filterConfig = [
 ]
 // 搜索组件表单校验配置
 export const filterRules = {
-    name: [
+    username: [
         { required: true, message: '请输入活动名称', trigger: 'blur' },
         { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
     ]

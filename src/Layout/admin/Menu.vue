@@ -1,12 +1,11 @@
 <template>
     <div class="menus">
       <el-menu
-        default-active="2"
         class="menubar"
         @open="handleOpen"
         @close="handleClose">
         
-        <el-menu-item index="2">
+        <el-menu-item index="2" @click="goToView({name: 'AdminDashboard'})">
           <i class="el-icon-menu"></i>
           <span slot="title">首页</span>
         </el-menu-item>
@@ -21,6 +20,14 @@
           </template>
           <el-menu-item @click="goToView({name: 'OrganizeManageOrganize'})" index="1-1">组织管理</el-menu-item>
           <el-menu-item @click="goToView({name: 'OrganizeManageMember'})" index="1-2">员工管理</el-menu-item>
+        </el-submenu>
+        <el-submenu index="2">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>应用管理</span>
+          </template>
+          <el-menu-item @click="goToView({name: 'OrganizeManageOrganize'})" index="2-1">本组织应用</el-menu-item>
+          <el-menu-item @click="goToView({name: 'OrganizeManageMember'})" index="2-2">下级组织应用</el-menu-item>
         </el-submenu>
         <el-submenu index="3">
           <template slot="title">
