@@ -2,19 +2,19 @@
     <div class="app-manage__wrapper">
         <ItemCard class="app-item-card">
             <div class="items">
-                <div class="app-item" v-for="item in 0">
-                    <i class="el-icon-more" @click.stop="setAppInfo"></i>
+                <div class="app-item" v-for="item in appList" :key="item.value" @click="toView(item)">
+                    <i class="el-icon-more" @click.stop="setAppInfo(item)"></i>
                     <div class="icon">
                         <img src="@/assets/icons/logo.png" alt="">
                     </div>
-                    <div class="name">日报日报</div>
+                    <div class="name">{{ item.name }}</div>
                 </div>
                 <div v-if="canAdd" class="app-item add-item flex-xy-center">
                     <i class="el-icon-plus" @click="addApp"></i>
                 </div>
             </div>
         </ItemCard>
-        <Dialog :title="appTitle" width="30%" :visible.sync="dialogVisible" :show-close="false" @confirm="confirm">
+        <Dialog :title="appTitle" width="500px" :visible.sync="dialogVisible" :show-close="false" @confirm="confirm">
             <DynamicForms
                 :config="config"
                 :rules="rules"
@@ -44,6 +44,10 @@ export default {
         appList: {
             type: Array,
             default: () => []
+        },
+        appTagList: {
+            type: Array,
+            default: () => []
         }
     },
     data () {
@@ -61,34 +65,47 @@ export default {
     computed: {
         ...mapGetters(['currentOrganize'])
     },
+    created () { },
     methods: {
-        async getApps() {
-
-        },
         addApp () {
             this.appAction = 'add';
-            this.defaultData = {};
+            this.defaultData = {status:1, type: Number(this.type)};
             this.appTitle = '新建应用';
             this.dialogVisible = true;
+            this.setTypeOptions();
+        },
+        setTypeOptions () {
+            this.config[1].options = this.appTagList.map(item=>{
+                return {
+                    label: item.label,
+                    value: item.id
+                }
+            });
         },
         setAppInfo(data) {
-            his.appAction = 'edit';
+            this.appAction = 'edit';
             this.defaultData = data;
             this.appTitle = '编辑应用';
             this.dialogVisible = true;
+            this.setTypeOptions();
         },
         async confirm (slotComps) {
+            // 通过slot拿到表单数据
             let componentInstance = slotComps.default[0].componentInstance;
             let [err, res] = await componentInstance.getData();
             if (!err) {
+                // 新增
                 if (this.appAction == 'add') {
+                    // 新增需要带上组织id
                     res.organize_id = this.currentOrganize[this.currentOrganize.length - 1];
+                    // 新增需要带上应用分类id， 如果不存在该分类，后端直接创建
+                    res.tag_type = 1;
                     let [err2, res2] = await addApp(res);
                     if (!err2) {
                         this.dialogVisible = false;
                         this.$message.success('新建成功！');
                     }
-                } else {
+                } else {// 编辑
                     let [err2, res2] = await updateApp(res);
                     if (!err2) {
                         this.dialogVisible = false;
@@ -96,6 +113,11 @@ export default {
                     }
                 }
             }
+        },
+        toView(data) {
+            this.$router.push({
+                path: `/design/app/${data.id}`
+            })
         }
     }
 }

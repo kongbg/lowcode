@@ -1,6 +1,6 @@
 <template>
     <div class="tabs__wrapper">
-        <el-tabs v-model="paneId">
+        <el-tabs v-model="paneId" v-on="$listeners">
             <el-tab-pane class="tab-pane" v-for="item in tabList" :label="item.label" :name="item.value" :key="item.id"></el-tab-pane>
             <slot></slot>
         </el-tabs>

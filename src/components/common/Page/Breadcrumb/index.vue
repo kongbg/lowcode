@@ -2,7 +2,7 @@
     <div class="breadcrumb__wrapper">
         <el-page-header v-if="showBack" @back="goBack"></el-page-header>
         <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item v-for="(item,i) in breadcrumbList" :key="item.path">
+            <el-breadcrumb-item v-for="(item,i) in breadcrumbList" :key="item.path + i">
             <span @click="goPage(item, i)">{{ item.title }}</span>
         </el-breadcrumb-item>
         </el-breadcrumb>

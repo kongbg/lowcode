@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import platform from '@/store/modules/platform'
+import platform from '@/store/modules/platform';
+import appTag from '@/store/modules/appTag'
 import getters from '@/store/getters.js'
 import createPersistedstate  from 'vuex-persistedstate'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     modules: {
-        platform
+        platform,
+        appTag
     },
     getters,
     plugins:[

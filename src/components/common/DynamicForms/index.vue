@@ -18,6 +18,8 @@
                         :placeholder="item.placeholder"
                         :disabled="item.disabled"
                         :clearable="item.clearable"
+                        :allowCreate="item.allowCreate"
+                        :filterable="item.filterable"
                         :multiple="item.multiple"
                     >
                         <el-option

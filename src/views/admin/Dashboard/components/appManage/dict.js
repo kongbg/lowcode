@@ -8,16 +8,9 @@ export const config = [
         label: '分类',
         type: 'select',
         prop: 'type',
-        options: [
-            {
-                value: '1',
-                label: '分类1'
-            },
-            {
-                value: '2',
-                label: '分类2'
-            }
-        ]
+        allowCreate: true,
+        filterable: true,
+        options: []
     },
     {
         label: '图标',
@@ -39,12 +32,11 @@ export const config = [
             }
         ]
     }
-    
 ]
 export const rules = {
     name: [
         { required: true, message: '请输入活动名称', trigger: 'blur' },
-        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }
     ]
 
 }

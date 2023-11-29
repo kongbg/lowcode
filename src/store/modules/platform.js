@@ -1,5 +1,6 @@
 import { getOrganizeTree } from '@/api/admin/organizeManage/index.js'
 const platform = {
+    namespaced: true,
     state: {
         userInfo: {}, // 平台用户信息
         organizetree: [], // 组织信息
