@@ -12,6 +12,10 @@
                 <div v-if="canAdd" class="app-item add-item flex-xy-center">
                     <i class="el-icon-plus" @click="addApp"></i>
                 </div>
+                <div class="empty__wrapper" v-if="!appList.length">
+                    <el-empty  description="暂无可用应用"></el-empty>
+                </div>
+                
             </div>
         </ItemCard>
         <Dialog :title="appTitle" width="500px" :visible.sync="dialogVisible" :show-close="false" @confirm="confirm">
@@ -131,6 +135,12 @@ export default {
             .el-icon-plus {
                 font-size: 40px;
             }
+        }
+    }
+    .empty__wrapper {
+        width: 100%;
+        /deep/.el-empty {
+            padding: 10px 0;
         }
     }
 }
