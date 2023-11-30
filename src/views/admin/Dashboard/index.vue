@@ -41,8 +41,27 @@
                 <AppManage :type="active2"></AppManage>
             </tabs>
         </ItemCard>
-        <div v-if="!organizetree.length">
+        <div v-if="userInfo.company_id && !organizetree.length">
             <div>快去完善组织信息吧！</div>
+        </div>
+        <div v-if="!userInfo.company_id" class="init-organize__wrapper">
+            <div class="form__wrapper">
+                <div class="title">请先完善公司信息</div>
+                <div class="form">
+                    <DynamicForms
+                        ref="form"
+                        :config="addItemConfig"
+                        :rules="addItemRules"
+                        :model="addItemData"
+                        mode=""
+                        label-width="120px"
+                        size="small"
+                    ></DynamicForms>
+                    <div class="btns">
+                        <el-button size="small" type="primary" @click="submit">保存</el-button>
+                    </div>
+                </div>
+            </div>
         </div>
     </PageWrapper>
 </template>
@@ -50,6 +69,7 @@
 import AppManage from './components/appManage';
 import { mapGetters } from "vuex";
 import { getAppList } from '@/api/admin/app/index.js'
+import { updateUser } from '@/api/admin/user/index.js'
 export default {
     name: 'AdminDashboard',
     components: {
@@ -81,9 +101,84 @@ export default {
             appList1: [],
             active2: '',
             appList2: [],
+
+            addItemConfig: [
+                {
+                    label: '用户名',
+                    type: 'input',
+                    prop: 'username',
+                    disabled: true
+                },
+                {
+                    label: '昵称',
+                    type: 'input',
+                    prop: 'nickname'
+                },
+                {
+                    label: '公司名称',
+                    type: 'input',
+                    prop: 'company_name'
+                },
+                {
+                    label: '社会信用代码',
+                    type: 'input',
+                    prop: 'credit_code'
+                },
+                {
+                    label: '法人姓名',
+                    type: 'input',
+                    prop: 'legal'
+                },
+                {
+                    label: '法人手机号',
+                    type: 'input',
+                    prop: 'legal_phone'
+                },
+                {
+                    label: '手机号(可用于登录、修改密码)',
+                    type: 'input',
+                    prop: 'phone'
+                }
+            ],
+            addItemRules: {
+                company_name: [
+                    { required: true, message: '请输入公司名称', trigger: 'blur' },
+                    { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+                ],
+                legal: [
+                    { required: true, message: '请输入法人姓名', trigger: 'blur' },
+                    { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+                ],
+                legal_phone: [
+                    { required: true, message: '请输入法人手机号', trigger: 'blur' },
+                    { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+                ],
+                phone: [
+                    { required: true, message: '请输入手机号', trigger: 'blur' },
+                    { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+                ],
+                credit_code: [
+                    { required: true, message: '请输入社会信用代码', trigger: 'blur' },
+                    { min: 18, max: 18, message: '长度在 18 到 18 个字符', trigger: 'blur' }
+                ],
+            },
+            addItemData: {}
         }
     },
     async created () {
+
+        let { id, username, nickname, company_name, legal, legal_phone, phone, credit_code } = this.userInfo;
+        this.addItemData = {
+            id,
+            username,
+            nickname,
+            company_name,
+            legal,
+            legal_phone,
+            phone,
+            credit_code
+        }
+
         // 获取组织树形结构
         this.$store.dispatch('platform/getOrganizeTree');
         await this.$store.dispatch('appTag/getAppTagList1');
@@ -126,6 +221,18 @@ export default {
             this.$router.push({
                 path: `/design/app/123`
             })
+        },
+        async submit () {
+            let [err, res] = await this.$refs.form.getData();
+            console.log(err, res);
+
+            if (!err) {
+                let [err2, res2] = await updateUser(this.addItemData);
+                if (!err2) {
+                    this.$message.success('完善成功！')
+                    this.$store.dispatch('platform/getUserInfo');
+                }
+            }
         }
     }
 }
@@ -150,6 +257,23 @@ export default {
 
                     }
                 }
+            }
+        }
+    }
+    .init-organize__wrapper {
+        background: #fff;
+        width: 100%;
+        height: 100%;
+        .form__wrapper {
+            width: 600px;
+            margin: 0 auto;
+            padding: 20px 0;
+            .title {
+                text-align: center;
+                font-size: 24px;
+            }
+            .btns {
+                text-align: center;
             }
         }
     }

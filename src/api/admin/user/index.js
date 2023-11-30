@@ -50,3 +50,29 @@ export const getUserList = data => {
         data
     })
 }
+
+/**
+ * 获取用户信息
+ * @param {*} data 
+ * @returns 
+ */
+export const getUserInfo = data => {
+    return axios({
+        url: '/api/platform/user/info',
+        method: 'get',
+        data
+    })
+}
+
+/**
+ * 更新用户信息
+ * @param {*} data 
+ * @returns 
+ */
+export const updateUser = data => {
+    return axios({
+        url: '/api/platform/user/update',
+        method: 'post',
+        data
+    })
+}

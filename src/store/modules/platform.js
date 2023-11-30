@@ -1,4 +1,5 @@
 import { getOrganizeTree } from '@/api/admin/organizeManage/index.js'
+import { getUserInfo } from '@/api/admin/user';
 const platform = {
     namespaced: true,
     state: {
@@ -31,7 +32,17 @@ const platform = {
         // 设置平台用户信息
         setUserInfo ({ commit }, data) {
             commit('SET_USERINFO', data)
-        }
+        },
+        // 获取用户信息
+        async getUserInfo ({ commit }) {
+            let [err, res] = await getUserInfo();
+            console.log(err, res)
+            if (!err) {
+                if (res.data) {
+                    commit('SET_USERINFO', res.data)
+                }
+            };
+        },
     }
 }
 

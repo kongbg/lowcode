@@ -21,7 +21,6 @@
 
 <script>
 import { register } from '@/api/admin/user/index.js'
-import { mapActions } from 'vuex'
 export default {
     name: 'AdminRegister',
     data () {
@@ -42,7 +41,6 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['setUserInfo']),
         async register() {
             this.loading = true;
             let [err, res] = await register(this.form);
@@ -53,8 +51,10 @@ export default {
                     message: '注册成功！'
                 })
 
-                localStorage.clear();
-                this.$router.push({name: 'Adminlogin'})
+                setTimeout(() =>{
+                    localStorage.clear();
+                    this.$router.push({name: 'Adminlogin'})
+                }, 1500)
             }
         }
     }

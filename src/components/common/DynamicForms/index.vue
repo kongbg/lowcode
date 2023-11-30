@@ -163,9 +163,10 @@ export default {
         submit () {
             this.$refs.dynamicFrom.validate((valid) => {
                 if (valid) {
-                    this.$emit('submit', this.formData)
+                    this.$emit('submit', [null, this.formData])
                 } else {
                     console.warn('表单检验不通过')
+                    this.$emit('submit', [{message: '表单检验不通过'}, null])
                     return false;
                 }
             });
@@ -178,7 +179,7 @@ export default {
                         resolve([null, this.formData]);
                     } else {
                         console.warn('表单检验不通过')
-                        resolve([{message: '表单检验不通过'}, {}]);
+                        resolve([{message: '表单检验不通过'}, null]);
                     }
                 });
             })

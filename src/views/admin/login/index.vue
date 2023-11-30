@@ -24,7 +24,6 @@
 
 <script>
 import { login } from '@/api/admin/user/index.js'
-import { mapActions } from 'vuex'
 export default {
     name: 'AdminLogin',
     data () {
@@ -45,7 +44,6 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['setUserInfo']),
         async login() {
             this.loading = true;
             let [err, res] = await login(this.form);
@@ -57,16 +55,18 @@ export default {
                 })
                 let { token, userInfo } = res;
 
-                this.setUserInfo(userInfo);
+                await this.$store.dispatch('platform/setUserInfo', userInfo);
 
                 let fullpath = this.$route.query.fullpath;
                 localStorage.setItem('Platform-token', token);
                 localStorage.setItem('Platform-userInfo', JSON.stringify(userInfo));
-                if (fullpath) {
-                    this.$router.push({ path: fullpath })
-                } else {
-                    this.$router.push({name: 'AdminDashboard'})
-                }
+                setTimeout(()=>{
+                    if (fullpath) {
+                        this.$router.push({ path: fullpath })
+                    } else {
+                        this.$router.push({name: 'AdminDashboard'})
+                    }
+                }, 1500)
             }
         },
         toRegister ( ) {

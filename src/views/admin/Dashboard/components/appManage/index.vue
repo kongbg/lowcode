@@ -17,7 +17,7 @@
                         <el-button v-if="canAdd" size="small" type="primary" @click="addApp">新建应用</el-button>
                     </el-empty>
                 </div>
-                
+
             </div>
         </ItemCard>
         <Dialog :title="appTitle" width="500px" :visible.sync="dialogVisible" :show-close="false" @confirm="confirm">
