@@ -48,6 +48,24 @@ const routes = [
         },
         component: () => import("@/views/admin/organizeManage/organize/details/index.vue"),
       },
+      // 应用管理
+      {
+        path: "appManage/myapp",
+        name: "AppManageMyapp",
+        meta: {
+          title: "应用管理",
+        },
+        component: () => import("@/views/admin/appManage/myapp/index.vue"),
+      },
+      // 应用管理-详情
+      {
+        path: "appManage/myapp/viewDetails",
+        name: "AppManageMyappDetails",
+        meta: {
+          title: "详情",
+        },
+        component: () => import("@/views/admin/appManage/myapp/details/index.vue"),
+      },
       // 员工管理
       {
         path: "organizeManage/member",
@@ -76,10 +94,17 @@ const routes = [
       },
     ],
   },
+  // 登录
   {
     path: "/admin/login",
     name: 'Adminlogin',
     component: () => import("@/views/admin/login/index.vue")
+  },
+  // 注册
+  {
+    path: "/admin/register",
+    name: 'AdminRegister',
+    component: () => import("@/views/admin/register/index.vue")
   },
   {
     path: "/design",
@@ -115,9 +140,12 @@ router.beforeEach((to, form, next) => {
   let token = localStorage.getItem('Platform-token')||'';
   let service = to.path.split('/')[1];
   let loginPath = `/${service}/login`;
+  let registerPath = `/${service}/register`;
+  let whites = [loginPath, registerPath]
   let dashboardPath = `/${service}/Dashboard`;
+
   if (!token) {
-    if (to.path == loginPath) {
+    if (whites.includes(to.path)) {
       next();
     } else {
       next(loginPath);

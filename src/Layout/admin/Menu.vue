@@ -3,67 +3,104 @@
       <el-menu
         class="menubar"
         @open="handleOpen"
-        @close="handleClose">
-        
-        <el-menu-item index="2" @click="goToView({name: 'AdminDashboard'})">
-          <i class="el-icon-menu"></i>
-          <span slot="title">首页</span>
-        </el-menu-item>
-        <!-- <el-menu-item index="5">
-          <i class="el-icon-menu"></i>
-          <span slot="title">组织管理</span>
-        </el-menu-item> -->
-        <el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>组织管理</span>
-          </template>
-          <el-menu-item @click="goToView({name: 'OrganizeManageOrganize'})" index="1-1">组织管理</el-menu-item>
-          <el-menu-item @click="goToView({name: 'OrganizeManageMember'})" index="1-2">员工管理</el-menu-item>
-        </el-submenu>
-        <el-submenu index="2">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>应用管理</span>
-          </template>
-          <el-menu-item @click="goToView({name: 'OrganizeManageOrganize'})" index="2-1">本组织应用</el-menu-item>
-          <el-menu-item @click="goToView({name: 'OrganizeManageMember'})" index="2-2">下级组织应用</el-menu-item>
-        </el-submenu>
-        <el-submenu index="3">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>demo管理</span>
-          </template>
-          <el-menu-item @click="goToView({name: 'OrganizeManageOrganize'})" index="1-1">动态表格-1</el-menu-item>
-          <el-menu-item @click="goToView({name: 'OrganizeManageMember'})" index="1-2">动态表格-1</el-menu-item>
-        </el-submenu>
-        <!-- <el-menu-item index="3" disabled>
-          <i class="el-icon-document"></i>
-          <span slot="title">导航三</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <i class="el-icon-setting"></i>
-          <span slot="title">导航四</span>
-        </el-menu-item> -->
+        @close="handleClose"
+      >
+        <menu-item v-for="item in menus" :menu="item" :key="item.id"></menu-item>
       </el-menu>
     </div>
 </template>
 <script>
+import MenuItem from '../components/menuItem.vue';
 export default {
     name: "Menu",
+    components: {
+      MenuItem
+    },
+    data () {
+      return {
+        menus: [
+          {
+            id: '1',
+            name: '首页',
+            icon: 'el-icon-menu',
+            routeName: 'AdminDashboard',
+            path: '/admin/dashboard'
+          },
+          {
+            id: '2',
+            name: '组织管理',
+            icon: 'el-icon-location',
+            children: [
+              {
+                id: '2001',
+                name: '组织管理',
+                // icon: 'el-icon-menu',
+                routeName: 'OrganizeManageOrganize',
+                path: '/admin/organizeManage/organize'
+              },
+              {
+                id: '2002',
+                name: '员工管理',
+                routeName: 'OrganizeManageMember',
+                path: '/admin/organizeManage/member'
+              },
+            ]
+          },
+          {
+            id: '3',
+            name: '应用管理',
+            icon: 'el-icon-location',
+            children: [
+              {
+                id: '3001',
+                name: '本组织应用',
+                routeName: 'AppManageMyapp',
+                path: '/admin/appManage/myapp'
+              },
+              {
+                id: '3002',
+                name: '下级组织应用',
+                routeName: 'AppManageMyapp',
+                path: '/admin/AppManageMyapp'
+              },
+            ]
+          },
+          {
+            id: '4',
+            name: 'demo管理',
+            icon: 'el-icon-location',
+            children: [
+              {
+                id: '4001',
+                name: '动态表格-1',
+                routeName: 'OrganizeManageOrganize',
+                path: '/admin/organizeManage/organize',
+                // children: [
+                //   {
+                //     id: '4001001',
+                //     name: '动态表格-1-1',
+                //     routeName: 'OrganizeManageOrganize',
+                //     path: '/admin/organizeManage/organize',
+                //   }
+                // ]
+              },
+              {
+                id: '4002',
+                name: '动态表格-2',
+                routeName: 'OrganizeManageOrganize',
+                path: '/admin/organizeManage/organize'
+              },
+            ]
+          },
+        ]
+      }
+    },
     methods: {
         handleOpen(key, keyPath) {
-            console.log(key, keyPath);
+            // console.log(key, keyPath);
         },
         handleClose(key, keyPath) {
-            console.log(key, keyPath);
-        },
-        goToView (data) {
-          this.$router.push(
-            {
-              name: data.name
-            }
-          )
+            // console.log(key, keyPath);
         }
     }
 }

@@ -13,6 +13,19 @@ export const addApp = data => {
 }
 
 /**
+ * 获取应用详情
+ * @param {*} data
+ * @returns
+ */
+export const getAppInfo = data => {
+    return axios({
+        url: '/api/platform/app/info',
+        method: 'get',
+        data
+    })
+}
+
+/**
  * 获取应用列表
  * @param {*} data
  * @returns

@@ -9,11 +9,13 @@
                     </div>
                     <div class="name">{{ item.name }}</div>
                 </div>
-                <div v-if="canAdd" class="app-item add-item flex-xy-center">
+                <div v-if="canAdd && appList.length" class="app-item add-item flex-xy-center">
                     <i class="el-icon-plus" @click="addApp"></i>
                 </div>
                 <div class="empty__wrapper" v-if="!appList.length">
-                    <el-empty  description="暂无可用应用"></el-empty>
+                    <el-empty  description="暂无可用应用">
+                        <el-button v-if="canAdd" size="small" type="primary" @click="addApp">新建应用</el-button>
+                    </el-empty>
                 </div>
                 
             </div>

@@ -13,6 +13,19 @@ export const login = data => {
 }
 
 /**
+ * 注册
+ * @param {*} data 
+ * @returns 
+ */
+export const register = data => {
+    return axios({
+        url: '/api/platform/user/register',
+        method: 'post',
+        data
+    })
+}
+
+/**
  * 退出
  * @param {*} data 
  * @returns 

@@ -27,6 +27,17 @@
                     :fixed="item.fixed"
                     :height="item.height"
                 ></slot>
+                <!-- 定义了formatProp -->
+                <el-table-column
+                    v-else-if="item.formatProp"
+                    v-bind="item"
+                    :align="item.align || 'center'"
+                    :key="`normal_${index}`"
+                >
+                    <template slot-scope="scope">
+                        {{ item.formatProp(item, scope.row) }}
+                    </template>
+                </el-table-column>
                 <!--常规内容-->
                 <el-table-column v-else v-bind="item" :align="item.align || 'center'" :key="`normal_${index}`"></el-table-column>
             </template>
@@ -69,7 +80,7 @@ export default {
                 pageSize: this.pagination.pageSize,
             };
             params = Object.assign(params, query)
-            console.log(params);
+            // console.log(params);
             this.tableData = [];
             this.tableLoading = true;
             let [err, res] = await api(params);

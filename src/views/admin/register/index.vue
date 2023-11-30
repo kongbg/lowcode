@@ -1,7 +1,7 @@
 <template>
     <div class="admin-login__wrapper">
         <div class="login-form__wrapper">
-            <div class="title">登 录</div>
+            <div class="title">注 册</div>
             <div class="form">
                 <el-form ref="form" :rules="rules" :model="form" label-width="80px">
                     <el-form-item label="用户名" prop="userName">
@@ -11,10 +11,7 @@
                         <el-input size="small" placeholder="请输入密码" v-model="form.passWord" show-password></el-input>
                     </el-form-item>
                     <el-form-item class="login-btn__wrapper">
-                        <el-button type="primary" class="login-btn" size="small" :loading="loading" @click="login">登 录</el-button>
-                    </el-form-item>
-                    <el-form-item class="register">
-                        还没有账号？去 <el-button type="text" @click="toRegister">注册</el-button>
+                        <el-button type="primary" class="login-btn" size="small" :loading="loading" @click="register">注 册</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -23,10 +20,10 @@
 </template>
 
 <script>
-import { login } from '@/api/admin/user/index.js'
+import { register } from '@/api/admin/user/index.js'
 import { mapActions } from 'vuex'
 export default {
-    name: 'AdminLogin',
+    name: 'AdminRegister',
     data () {
         return {
             loading: false,
@@ -46,32 +43,19 @@ export default {
     },
     methods: {
         ...mapActions(['setUserInfo']),
-        async login() {
+        async register() {
             this.loading = true;
-            let [err, res] = await login(this.form);
+            let [err, res] = await register(this.form);
             this.loading = false;
             if (!err) {
                 this.$message({
                     type: 'success',
-                    message: '登录成功！'
+                    message: '注册成功！'
                 })
-                let { token, userInfo } = res;
 
-                this.setUserInfo(userInfo);
-
-                let fullpath = this.$route.query.fullpath;
-                localStorage.setItem('Platform-token', token);
-                localStorage.setItem('Platform-userInfo', JSON.stringify(userInfo));
-                if (fullpath) {
-                    this.$router.push({ path: fullpath })
-                } else {
-                    this.$router.push({name: 'AdminDashboard'})
-                }
+                localStorage.clear();
+                this.$router.push({name: 'Adminlogin'})
             }
-        },
-        toRegister ( ) {
-            console.log('AdminRegister')
-            this.$router.push({name: 'AdminRegister'})
         }
     }
 }
@@ -108,9 +92,6 @@ export default {
                     width: 240px;
                 }
             }
-        }
-        /deep/.register {
-            text-align: right;
         }
     }
 }

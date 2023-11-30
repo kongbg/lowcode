@@ -100,20 +100,26 @@ export default {
     methods: {
         async tab1Click () {
             let params = {
-                type: this.active1
+                type: this.active1,
+                page: 1,
+                pageSize: 999
             }
             let [err, res] = await getAppList(params);
             if (!err) {
-                this.appList1 = res.data;
+                let { total, list } = res;
+                this.appList1 = list;
             }
         },
         async tab2Click () {
             let params = {
-                type: this.active2
+                type: this.active2,
+                page: 1,
+                pageSize: 999
             }
             let [err, res] = await getAppList(params);
             if (!err) {
-                this.appList2 = res.data;
+                let { total, list } = res;
+                this.appList2 = list;
             }
         },
         toView() {
