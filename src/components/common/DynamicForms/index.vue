@@ -103,7 +103,6 @@ export default {
         },
         formData () {
             let data = this.$attrs.model;
-            debugger
             // 补全formData未定义的默认值
             this.config.forEach(item => {
                 let { prop, type } = item;

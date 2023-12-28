@@ -42,7 +42,7 @@
             </tabs>
         </ItemCard>
         <div v-if="userInfo.company_id && !organizetree.length">
-            <div>快去完善组织信息吧！</div>
+            <div>快去完善组织信息吧！<el-button type="text" @click="toOrganize">去完善～</el-button></div>
         </div>
         <div v-if="!userInfo.company_id" class="init-organize__wrapper">
             <div class="form__wrapper">
@@ -233,6 +233,11 @@ export default {
                     this.$store.dispatch('platform/getUserInfo');
                 }
             }
+        },
+        toOrganize () {
+            this.$router.push({
+                name: 'OrganizeManageOrganize'
+            })
         }
     }
 }

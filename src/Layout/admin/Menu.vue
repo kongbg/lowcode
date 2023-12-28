@@ -2,6 +2,7 @@
     <div class="menus">
       <el-menu
         class="menubar"
+        :default-active="active"
         @open="handleOpen"
         @close="handleClose"
       >
@@ -16,8 +17,15 @@ export default {
     components: {
       MenuItem
     },
+    watch: {
+      $route(nval, oval) {
+        let route = this.findRoute(this.menus, nval.name);
+        route ? this.active = route.id : '';
+      }
+    },
     data () {
       return {
+        active: '1',
         menus: [
           {
             id: '1',
@@ -96,6 +104,17 @@ export default {
       }
     },
     methods: {
+      findRoute (routes=[], name='') {
+        for (var i = 0; i < routes.length; i++){
+          let item = routes[i];
+          if (item.routeName == name) {
+            return item;
+          } else {
+            let res = this.findRoute(item.children, name);
+            if (res) return res
+          }
+        }
+      },
         handleOpen(key, keyPath) {
             // console.log(key, keyPath);
         },
